@@ -11,7 +11,10 @@
 #
 # ============================================================
 
+import os
+
 import numpy as np
+import onnxruntime as ort
 from PIL import Image
 
 
@@ -68,11 +71,30 @@ def load_face_analyzer():
     # than speed.
     # --------------------------------------------------------
 
+    # --------------------------------------------------------
+    # Limit onnxruntime's internal thread pools.
+    #
+    # By default onnxruntime creates a thread per visible CPU
+    # core for both intra-op and inter-op parallelism. On a
+    # small Render instance (e.g. 512MB / shared CPU) this
+    # buys negligible speed for a single-face-per-request
+    # workload but adds real, avoidable memory overhead per
+    # thread. Pinning both to 1 keeps the footprint small and
+    # predictable.
+    # --------------------------------------------------------
+
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
+
+    session_options = ort.SessionOptions()
+    session_options.intra_op_num_threads = 1
+    session_options.inter_op_num_threads = 1
+
     app = FaceAnalysis(
-        name="buffalo_s",
+        name="buffalo_sc",
         providers=[
             "CPUExecutionProvider"
-        ]
+        ],
+        session_options=session_options
     )
 
 
