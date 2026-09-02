@@ -1,5 +1,7 @@
 # 🎬 Bollywood Look-Alike AI
 
+🎬 **Live demo:** [bollywood-look-alike-ai.onrender.com](https://bollywood-look-alike-ai.onrender.com)
+
 Upload a selfie and discover which Bollywood celebrity you visually resemble
 most, powered by AI face embeddings.
 
