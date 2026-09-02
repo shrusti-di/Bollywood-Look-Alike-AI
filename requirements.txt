@@ -3,4 +3,4 @@ Pillow
 numpy
 insightface
 onnxruntime
-opencv-python
+opencv-python-headless
