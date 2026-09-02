@@ -837,6 +837,27 @@ if uploaded_file is not None:
         st.stop()
 
 
+    # --------------------------------------------------------
+    # Cap upload resolution.
+    #
+    # Phone photos can easily be 12MP+. Face detection only
+    # runs at det_size=(320, 320) internally anyway, so there
+    # is no accuracy benefit to keeping the full-resolution
+    # image in memory - only a memory-spike risk on a small
+    # instance. 1600px on the long edge is comfortably more
+    # than the detector needs.
+    # --------------------------------------------------------
+
+    MAX_UPLOAD_DIMENSION = 1600
+
+    if max(user_image.size) > MAX_UPLOAD_DIMENSION:
+
+        user_image.thumbnail(
+            (MAX_UPLOAD_DIMENSION, MAX_UPLOAD_DIMENSION),
+            Image.LANCZOS
+        )
+
+
     # ========================================================
     # FACE DETECTION
     # ========================================================
